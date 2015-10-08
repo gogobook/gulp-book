@@ -1,20 +1,20 @@
-使用 gulp 编译 Sass
+使用 gulp 編譯 Sass
 ==================
 
-请务必理解如下章节后阅读此章节：
+請務必理解如下章節後閱讀此章節：
 
-1. [安装 Node 和 gulp](chapter1.md)
-2. [使用 gulp 压缩 JS](chapter2.md)
+1. [安裝 Node 和 gulp](chapter1.md)
+2. [使用 gulp 壓縮 JS](chapter2.md)
 
-[访问论坛获取帮助](https://github.com/nimojs/gulp-book/issues/15)
+[訪問論壇獲取幫助](https://github.com/nimojs/gulp-book/issues/15)
 
 ----------
 
-> Sass 是一种 CSS 的开发工具，提供了许多便利的写法，大大节省了开发者的时间，使得 CSS 的开发，变得简单和可维护。
+> Sass 是一種 CSS 的開發工具，提供了許多便利的寫法，大大節省了開發者的時間，使得 CSS 的開發，變得簡單和可維護。
 
-本章使用 `ruby-sass` 编译 css,若你没有安装 ruby 和 sass 请移步 [使用ruby.taobao安装 Sass](https://github.com/nimojs/blog/issues/14)
+本章使用 `ruby-sass` 編譯 css,若你沒有安裝 ruby 和 sass 請移步 [使用ruby.taobao安裝 Sass](https://github.com/nimojs/blog/issues/14)
 
-安装
+安裝
 ---
 
 ```
@@ -24,16 +24,16 @@ npm install gulp-ruby-sass
 基本用法
 -------
 
-你可以 [下载所有示例代码](https://github.com/nimojs/gulp-book/archive/master.zip) 或 [在线查看代码](https://github.com/nimojs/gulp-book/tree/master/demo/chapter6)
+你可以 [下載所有示例代碼](https://github.com/nimojs/gulp-book/archive/master.zip) 或 [在線查看代碼](https://github.com/nimojs/gulp-book/tree/master/demo/chapter6)
 
 ```js
-// 获取 gulp
+// 獲取 gulp
 var gulp = require('gulp')
-// 获取 gulp-ruby-sass 模块
+// 獲取 gulp-ruby-sass 模組
 var sass = require('gulp-ruby-sass')
 
-// 编译sass
-// 在命令行输入 gulp sass 启动此任务
+// 編譯sass
+// 在命令行輸入 gulp sass 啟動此任務
 gulp.task('sass', function() {
     return sass('sass/') 
     .on('error', function (err) {
@@ -43,19 +43,19 @@ gulp.task('sass', function() {
 });
 
 
-// 在命令行使用 gulp auto 启动此任务
+// 在命令行使用 gulp auto 啟動此任務
 gulp.task('auto', function () {
-    // 监听文件修改，当文件被修改则执行 images 任务
+    // 監聽文件修改，當文件被修改則執行 images 任務
     gulp.watch('sass/**/*.scss', ['sass'])
 });
 
-// 使用 gulp.task('default') 定义默认任务
-// 在命令行使用 gulp 启动 sass 任务和 auto 任务
+// 使用 gulp.task('default') 定義預設任務
+// 在命令行使用 gulp 啟動 sass 任務和 auto 任務
 gulp.task('default', ['sass', 'auto'])
 ```
 
 
-Sass 代码和编译后的 CSS 代码
+Sass 代碼和編譯後的 CSS 代碼
 ----------
 
 [sass/a.scss](https://github.com/nimojs/gulp-book/tree/master/demo/chapter6/sass/a.scss)
@@ -98,6 +98,6 @@ Sass 代码和编译后的 CSS 代码
   color: red;
 }
 ```
-[访问论坛获取帮助](https://github.com/nimojs/gulp-book/issues/15)
+[訪問論壇獲取幫助](https://github.com/nimojs/gulp-book/issues/15)
 
-[接着阅读：使用 gulp 开发一个项目](chapter7.md)
+[接著閱讀：使用 gulp 開發一個項目](chapter7.md)
