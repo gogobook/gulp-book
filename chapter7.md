@@ -1,37 +1,37 @@
-使用 gulp 构建一个项目
+使用 gulp 構建一個項目
 ==================
 
 
-请务必理解前面的章节后阅读此章节：
+請務必理解前面的章節後閱讀此章節：
 
-[访问论坛获取帮助](https://github.com/nimojs/gulp-book/issues/16)
+[訪問論壇獲取幫助](https://github.com/nimojs/gulp-book/issues/16)
 
 ----------
 
-本章将介绍
+本章將介紹
 - [gulp-watch-path](https://github.com/nimojs/gulp-watch-path)
 - [stream-combiner2](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md)
 - [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps)
 - [gulp-autoprefixer](https://github.com/sindresorhus/gulp-autoprefixer/blob/master/package.json)
 
-并将之前所有章节的内容组合起来编写一个前端项目所需的 gulp 代码。
+並將之前所有章節的內容組合起來編寫一個前端項目所需的 gulp 代碼。
 
-你可以在 [nimojs/gulp-demo](https://github.com/nimojs/gulp-demo) 查看完整代码。
+你可以在 [nimojs/gulp-demo](https://github.com/nimojs/gulp-demo) 查看完整代碼。
 
-若你不了解npm 请务必阅读 [npm模块管理器](http://javascript.ruanyifeng.com/nodejs/npm.html)
+若你不瞭解npm 請務必閱讀 [npm模組管理器](http://javascript.ruanyifeng.com/nodejs/npm.html)
 
 package.json
 ------------
 
-如果你熟悉 npm 则可以利用 `package.json` 保存所有 `npm install --save-dev gulp-xxx` 模块依赖和模块版本。
+如果你熟悉 npm 則可以利用 `package.json` 保存所有 `npm install --save-dev gulp-xxx` 模組依賴和模組版本。
 
-在命令行输入
+在命令行輸入
 
 ```
 npm init
 ```
 
-会依次要求补全项目信息，不清楚的可以直接回车跳过
+會依次要求補全項目信息，不清楚的可以直接回車跳過
 ```
 name: (gulp-demo) 
 version: (1.0.0) 
@@ -43,7 +43,7 @@ test command:
 Is this ok? (yes) 
 ```
 
-最终会在当前目录中创建 `package.json` 文件并生成类似如下代码：
+最終會在當前目錄中創建 `package.json` 文件並生成類似如下代碼：
 ```js
 {
   "name": "gulp-demo",
@@ -68,14 +68,14 @@ Is this ok? (yes)
 }
 ```
 
-### 安装依赖
+### 安裝依賴
 
-安装 gulp 到项目（防止全局 gulp 升级后与此项目 `gulpfile.js` 代码不兼容）
+安裝 gulp 到項目（防止全局 gulp 升級後與此項目 `gulpfile.js` 代碼不兼容）
 ```
 npm install gulp --save-dev
 ```
 
-此时打开 `package.json` 会发现多了如下代码
+此時打開 `package.json` 會發現多了如下代碼
 
 ```js
 "devDependencies": {
@@ -83,17 +83,17 @@ npm install gulp --save-dev
 }
 ```
 
-声明此项目的开发依赖 gulp
+聲明此項目的開發依賴 gulp
 
-接着安装其他依赖：
+接著安裝其他依賴：
 
-> 安装模块较多，请耐心等待，若一直安装失败可使用[npm.taobao.org](http://npm.taobao.org/)
+> 安裝模組較多，請耐心等待，若一直安裝失敗可使用[npm.taobao.org](http://npm.taobao.org/)
 
 
 ```
 npm install gulp-uglify gulp-watch-path stream-combiner2 gulp-sourcemaps gulp-minify-css gulp-autoprefixer gulp-less gulp-ruby-sass gulp-imagemin gulp-util --save-dev
 ```
-此时，[package.json](https://github.com/nimojs/gulp-demo/blob/master/package.json) 将会更新
+此時，[package.json](https://github.com/nimojs/gulp-demo/blob/master/package.json) 將會更新
 ```js
 "devDependencies": {
     "colors": "^1.0.3",
@@ -110,15 +110,15 @@ npm install gulp-uglify gulp-watch-path stream-combiner2 gulp-sourcemaps gulp-mi
 }
 ```
 
-当你将这份 gulpfile.js 配置分享给你的朋友时，就不需要将 `node_modules/` 发送给他，他只需在命令行输入
+當你將這份 gulpfile.js 配置分享給你的朋友時，就不需要將 `node_modules/` 發送給他，他只需在命令行輸入
 ```
 npm install
 ```
-就可以检测 `package.json` 中的 `devDependencies` 并安装所有依赖。
+就可以檢測 `package.json` 中的 `devDependencies` 並安裝所有依賴。
 
-设计目录结构
+設計目錄結構
 ----------
-我们将文件分为2类，一类是源码，一类是编译压缩后的版本。文件夹分别为 `src` 和 `dist`。(注意区分 `dist` 和 ·`dest` 的区别)
+我們將文件分為2類，一類是源碼，一類是編譯壓縮後的版本。文件夾分別為 `src` 和 `dist`。(注意區分 `dist` 和 ·`dest` 的區別)
 
 ```
 └── src/
@@ -126,9 +126,9 @@ npm install
 └── dist/
 ```
 
-`dist/` 目录下的文件都是根据 `src/` 下所有源码文件构建而成。
+`dist/` 目錄下的文件都是根據 `src/` 下所有源碼文件構建而成。
 
-在 `src/` 下创建前端资源对应的的文件夹
+在 `src/` 下創建前端資源對應的的文件夾
 
 ```
 └── src/
@@ -136,16 +136,16 @@ npm install
 	├── sass/    *.scss *.sass 文件
 	├── css/     *.css  文件
 	├── js/      *.js 文件
-	├── fonts/   字体文件
-    └── images/   图片
+	├── fonts/   字體文件
+    └── images/   圖片
 └── dist/
 ```
 
-你可以点击 [nimojs/gulp-demo](https://github.com/nimojs/gulp-demo/archive/master.zip) 下载本章代码。
+你可以點擊 [nimojs/gulp-demo](https://github.com/nimojs/gulp-demo/archive/master.zip) 下載本章代碼。
 
-让命令行输出的文字带颜色
+讓命令行輸出的文字帶顏色
 -------------------
-gulp 自带的输出都带时间和颜色，这样很容易识别。我们利用 [gulp-util](https://github.com/gulpjs/gulp-util) 实现同样的效果。
+gulp 自帶的輸出都帶時間和顏色，這樣很容易識別。我們利用 [gulp-util](https://github.com/gulpjs/gulp-util) 實現同樣的效果。
 
 ```js
 var gulp = require('gulp')
@@ -157,13 +157,13 @@ gulp.task('default', function () {
     gutil.log(gutil.colors.green('message:') + "some")
 })
 ```
-使用 `gulp` 启动默认任务以测试
+使用 `gulp` 啟動預設任務以測試
 ![gulp-util](https://cloud.githubusercontent.com/assets/3949015/7137629/a1def1b8-e2ed-11e4-83e0-5a6adb22de6f.png)
 
-配置 JS 任务
+配置 JS 任務
 --------
 ### gulp-uglify
-检测`src/js/`目录下的 js 文件修改后，压缩 `js/` 中所有 js 文件并输出到 `dist/js/` 中
+檢測`src/js/`目錄下的 js 文件修改後，壓縮 `js/` 中所有 js 文件並輸出到 `dist/js/` 中
 
 ```js
 var uglify = require('gulp-uglify')
@@ -179,9 +179,9 @@ gulp.task('default', function () {
 })
 ```
 
-`src/js/**/*.js` 是 glob 语法。[百度百科：glob模式](http://baike.baidu.com/view/4019153.htm) 、[node-glob](https://github.com/isaacs/node-glob)
+`src/js/**/*.js` 是 glob 語法。[百度百科：glob模式](http://baike.baidu.com/view/4019153.htm) 、[node-glob](https://github.com/isaacs/node-glob)
 
-在命令行输入 `gulp` 后会出现如下消息，表示已经启动。
+在命令行輸入 `gulp` 後會出現如下消息，表示已經啟動。
 ```ruby
 [20:39:50] Using gulpfile ~/Documents/code/gulp-book/demo/chapter7/gulpfile.js
 [20:39:50] Starting 'default'...
@@ -189,7 +189,7 @@ gulp.task('default', function () {
 ```
 
 
-此时编辑 [src/js/log.js](https://github.com/nimojs/gulp-demo/blob/master/src/js/log.js) 文件并保存，命令行会出现如下消息，表示检测到 `src/js/**/*.js` 文件修改后重新编译所有 js。
+此時編輯 [src/js/log.js](https://github.com/nimojs/gulp-demo/blob/master/src/js/log.js) 文件並保存，命令行會出現如下消息，表示檢測到 `src/js/**/*.js` 文件修改後重新編譯所有 js。
 
 ```ruby
 [20:39:52] Starting 'js'...
@@ -197,28 +197,28 @@ gulp.task('default', function () {
 ```
 
 ### gulp-watch-path
-此配置有个性能问题，当 `gulp.watch` 检测到  `src/js/` 目录下的js文件有修改时会将所有文件全部编译。实际上我们只需要重新编译被修改的文件。
+此配置有個性能問題，當 `gulp.watch` 檢測到  `src/js/` 目錄下的js文件有修改時會將所有文件全部編譯。實際上我們只需要重新編譯被修改的文件。
 
-简单介绍 `gulp.watch` 第二个参数为 `function` 时的用法。
+簡單介紹 `gulp.watch` 第二個參數為 `function` 時的用法。
 
 ```js
 gulp.watch('src/js/**/*.js', function (event) {
     console.log(event);
     /*
-	当修改 src/js/log.js 文件时
+	當修改 src/js/log.js 文件時
     event {
-		// 发生改变的类型，不管是添加，改变或是删除
+		// 發生改變的類型，不管是添加，改變或是刪除
         type: 'changed', 
-		// 触发事件的文件路径
+		// 觸發事件的文件路徑
         path: '/Users/nimojs/Documents/code/gulp-book/demo/chapter7/src/js/log.js'
     }
     */
 })
 ```
 
-我们可以利用 `event` 给到的信息，检测到某个 js 文件被修改时，只编写当前修改的 js 文件。
+我們可以利用 `event` 給到的信息，檢測到某個 js 文件被修改時，只編寫當前修改的 js 文件。
 
-可以利用 `gulp-watch-path` 配合 `event` 获取编译路径和输出路径。
+可以利用 `gulp-watch-path` 配合 `event` 獲取編譯路徑和輸出路徑。
 
 ```js
 var watchPath = require('gulp-watch-path')
@@ -247,37 +247,37 @@ gulp.task('watchjs', function () {
 gulp.task('default', ['watchjs'])
 ```
 
-[use-gulp-watch-path 完整代码](https://github.com/nimojs/gulp-book/tree/master/demo/chapter7/use-gulp-watch-path.js)
+[use-gulp-watch-path 完整代碼](https://github.com/nimojs/gulp-book/tree/master/demo/chapter7/use-gulp-watch-path.js)
 
 **`watchPath(event, search, replace, distExt)`**
 
-| 参数 | 说明 |
+| 參數 | 說明 |
 |--------|--------|
-|    event    |`gulp.watch` 回调函数的 `event`|
-|    search   |需要被替换的起始字符串|
-|    replace  |第三个参数是新的的字符串|
-|   distExt   |扩展名(非必填)|
+|    event    |`gulp.watch` 回調函數的 `event`|
+|    search   |需要被替換的起始字符串|
+|    replace  |第三個參數是新的的字符串|
+|   distExt   |擴展名(非必填)|
 
 
-此时编辑 [src/js/log.js](https://github.com/nimojs/gulp-demo/blob/master/src/js/log.js) 文件并保存，命令行会出现消息，表示检测到 `src/js/log.js` 文件修改后只重新编译 `log.js`。
+此時編輯 [src/js/log.js](https://github.com/nimojs/gulp-demo/blob/master/src/js/log.js) 文件並保存，命令行會出現消息，表示檢測到 `src/js/log.js` 文件修改後只重新編譯 `log.js`。
 
 ```ruby
 [21:47:25] changed src/js/log.js
 [21:47:25] Dist dist/js/log.js
 ```
 
-你可以访问 [gulp-watch-path](https://github.com/nimojs/gulp-watch-path) 了解更多。
+你可以訪問 [gulp-watch-path](https://github.com/nimojs/gulp-watch-path) 瞭解更多。
 
 ### stream-combiner2
 
-编辑 `log.js` 文件时，如果文件中有 js 语法错误时，gulp 会终止运行并报错。
+編輯 `log.js` 文件時，如果文件中有 js 語法錯誤時，gulp 會終止運行並報錯。
 
-当 log.js 缺少 `)`
+當 log.js 缺少 `)`
 ```js
 log('gulp-book'
 ```
 
-并保存文件时出现如下错误，但是错误信息不全面。而且还会让 gulp 停止运行。
+並保存文件時出現如下錯誤，但是錯誤信息不全面。而且還會讓 gulp 停止運行。
 
 ```
 events.js:85
@@ -293,7 +293,7 @@ js_error (/Users/nimojs/Documents/code/gulp-book/demo/chapter7/node_modules/gulp
 
 ```
 
-应对这种情况，我们可以使用 [Combining streams to handle errors](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md) 文档中推荐的 [stream-combiner2](https://github.com/substack/stream-combiner2)  捕获错误信息。
+應對這種情況，我們可以使用 [Combining streams to handle errors](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md) 文檔中推薦的 [stream-combiner2](https://github.com/substack/stream-combiner2)  捕獲錯誤信息。
 
 ```js
 var handleError = function (err) {
@@ -333,9 +333,9 @@ gulp.task('watchjs', function () {
 })
 ```
 
-[watchjs-1 完整代码](https://github.com/nimojs/gulp-book/tree/master/demo/chapter7/watchjs-1.js)
+[watchjs-1 完整代碼](https://github.com/nimojs/gulp-book/tree/master/demo/chapter7/watchjs-1.js)
 
-此时当编译错误的语法时，命令行会出现错误提示。而且不会让 gulp 停止运行。
+此時當編譯錯誤的語法時，命令行會出現錯誤提示。而且不會讓 gulp 停止運行。
 
 ```
 changed:src/js/log.js
@@ -350,9 +350,9 @@ plugin: gulp-uglify
 
 ### gulp-sourcemaps
 
-JS 压缩前和压缩后比较
+JS 壓縮前和壓縮後比較
 ```js
-// 压缩前
+// 壓縮前
 var log = function (msg) {
     console.log('--------');
     console.log(msg)
@@ -361,11 +361,11 @@ var log = function (msg) {
 log({a:1})
 log('gulp-book')
 
-// 压缩后
+// 壓縮後
 var log=function(o){console.log("--------"),console.log(o),console.log("--------")};log({a:1}),log("gulp-book");
 ```
 
-压缩后的代码不存在换行符和空白符，导致出错后很难调试，好在我们可以使用 [sourcemap](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html) 帮助调试
+壓縮後的代碼不存在換行符和空白符，導致出錯後很難調試，好在我們可以使用 [sourcemap](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html) 幫助調試
 
 ```js
 var sourcemaps = require('gulp-sourcemaps')
@@ -380,15 +380,15 @@ var combined = combiner.obj([
 // ...
 ```
 
-[watchjs-2 完整代码](https://github.com/nimojs/gulp-book/tree/master/demo/chapter7/watchjs-1.js)
+[watchjs-2 完整代碼](https://github.com/nimojs/gulp-book/tree/master/demo/chapter7/watchjs-1.js)
 
-此时 `dist/js/` 中也会生成对应的 `.map` 文件，以便使用 Chrome 控制台调试代码 [在线文件示例：src/js/](https://github.com/nimojs/gulp-demo/blob/master/src/js/)
+此時 `dist/js/` 中也會生成對應的 `.map` 文件，以便使用 Chrome 控制台調試代碼 [在線文件示例：src/js/](https://github.com/nimojs/gulp-demo/blob/master/src/js/)
 
 -----
 
-至此，我们完成了检测文件修改后压缩 JS 的 gulp 任务配置。
+至此，我們完成了檢測文件修改後壓縮 JS 的 gulp 任務配置。
 
-有时我们也需要一次编译所有 js 文件。可以配置 `uglifyjs` 任务。
+有時我們也需要一次編譯所有 js 文件。可以配置 `uglifyjs` 任務。
 
 ```js
 gulp.task('uglifyjs', function () {
@@ -403,16 +403,16 @@ gulp.task('uglifyjs', function () {
 })
 ```
 
-在命令行输入 `gulp uglifyjs` 以压缩 `src/js/` 下的所有 js 文件。
+在命令行輸入 `gulp uglifyjs` 以壓縮 `src/js/` 下的所有 js 文件。
 
-配置 CSS 任务
+配置 CSS 任務
 -------
 
-有时我们不想使用 LESS 或 SASS而是直接编写 CSS，但我们需要压缩 CSS 以提高页面加载速度。
+有時我們不想使用 LESS 或 SASS而是直接編寫 CSS，但我們需要壓縮 CSS 以提高頁面載入速度。
 
 ### gulp-minify-css
 
-按照本章中压缩 JS 的方式，先编写 `watchcss` 任务
+按照本章中壓縮 JS 的方式，先編寫 `watchcss` 任務
 
 ```js
 var minifycss = require('gulp-minify-css')
@@ -437,17 +437,17 @@ gulp.task('default', ['watchjs','watchcss'])
 
 ### gulp-autoprefixer
 
-autoprefixer 解析 CSS 文件并且添加浏览器前缀到CSS规则里。
-通过示例帮助理解 
+autoprefixer 解析 CSS 文件並且添加瀏覽器前綴到CSS規則裡。
+透過示例幫助理解 
 
-autoprefixer 处理前：
+autoprefixer 處理前：
 ```css
 .demo {
     display:flex;
 }
 ```
 
-autoprefixer 处理后：
+autoprefixer 處理後：
 ```css
 .demo {
     display:-webkit-flex;
@@ -455,9 +455,9 @@ autoprefixer 处理后：
     display:flex;
 }
 ```
-你只需要关心编写标准语法的 css，autoprefixer 会自动补全。
+你只需要關心編寫標準語法的 css，autoprefixer 會自動補全。
 
-在 watchcss 任务中加入 autoprefixer:
+在 watchcss 任務中加入 autoprefixer:
 
 ```js
 gulp.task('watchcss', function () {
@@ -479,9 +479,9 @@ gulp.task('watchcss', function () {
 })
 ```
 
-更多 autoprefixer 参数请查看 [gulp-autoprefixer](https://github.com/sindresorhus/gulp-autoprefixer)
+更多 autoprefixer 參數請查看 [gulp-autoprefixer](https://github.com/sindresorhus/gulp-autoprefixer)
 
-有时我们也需要一次编译所有 css 文件。可以配置 `minifyss` 任务。
+有時我們也需要一次編譯所有 css 文件。可以配置 `minifyss` 任務。
 
 ```js
 gulp.task('minifycss', function () {
@@ -496,11 +496,11 @@ gulp.task('minifycss', function () {
 })
 ```
 
-在命令行输入 `gulp minifyss` 以压缩 `src/css/` 下的所有 .css 文件并复制到 `dist/css` 目录下
+在命令行輸入 `gulp minifyss` 以壓縮 `src/css/` 下的所有 .css 文件並複製到 `dist/css` 目錄下
 
-配置 Less 任务
+配置 Less 任務
 ------------
-参考配置 JavaScript 任务的方式配置 less 任务
+參考配置 JavaScript 任務的方式配置 less 任務
 
 ```js
 var less = require('gulp-less')
@@ -544,10 +544,10 @@ gulp.task('lesscss', function () {
 gulp.task('default', ['watchjs', 'watchcss', 'watchless'])
 ```
 
-配置 Sass 任务
+配置 Sass 任務
 -------------
 
-参考配置 JavaScript 任务的方式配置 Sass 任务
+參考配置 JavaScript 任務的方式配置 Sass 任務
 
 ```js
 gulp.task('watchsass',function () {
@@ -587,7 +587,7 @@ gulp.task('sasscss', function () {
 gulp.task('default', ['watchjs', 'watchcss', 'watchless', 'watchsass', 'watchsass'])
 ```
 
-配置 image 任务
+配置 image 任務
 ----------
 
 ```js
@@ -617,9 +617,9 @@ gulp.task('image', function () {
 })
 ```
 
-配置文件复制任务
+配置文件複製任務
 -----------
-复制 `src/fonts/` 文件到 `dist/` 中
+複製 `src/fonts/` 文件到 `dist/` 中
 
 ```js
 gulp.task('watchcopy', function () {
@@ -642,13 +642,13 @@ gulp.task('copy', function () {
 gulp.task('default', ['watchjs', 'watchcss', 'watchless', 'watchsass', 'watchimage', 'watchcopy'])
 ```
 
-结语
+結語
 --------
 
-[完整代码](https://github.com/nimojs/gulp-demo/tree/master/gulpfile.js)
+[完整代碼](https://github.com/nimojs/gulp-demo/tree/master/gulpfile.js)
 
-[访问论坛获取帮助](https://github.com/nimojs/gulp-book/issues/16)
+[訪問論壇獲取幫助](https://github.com/nimojs/gulp-book/issues/16)
 
-你还想了解什么关于 gulp 的什么知识？ [告诉我们](https://github.com/nimojs/gulp-book/issues/8)
+你還想瞭解什麼關於 gulp 的什麼知識？ [告訴我們](https://github.com/nimojs/gulp-book/issues/8)
 
-后续还会又新章节更新。你可以[订阅本书](https://github.com/nimojs/gulp-book/issues/7) 当有新章节发布时，我们会通过邮件告诉你
+後續還會又新章節更新。你可以[訂閱本書](https://github.com/nimojs/gulp-book/issues/7) 當有新章節發佈時，我們會透過郵件告訴你
