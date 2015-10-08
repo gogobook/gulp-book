@@ -1,21 +1,21 @@
-# 使用 gulp 压缩 JS - 示例代码
+# 使用 gulp 壓縮 JS - 示例代碼
 
-[gulp 入门指南](https://github.com/nimojs/gulp-book)
+[gulp 入門指南](https://github.com/nimojs/gulp-book)
 
-本目录 [使用 gulp 压缩 JS](../../chapter2.md)章节中的示例代码
+本目錄 [使用 gulp 壓縮 JS](../../chapter2.md)章節中的示例代碼
 
 
-## 安装依赖
-打开命令行切换至此目录后，在命令行输入
+## 安裝依賴
+打開命令行切換至此目錄後，在命令行輸入
 ```
 npm install
 ```
 
-将会安装此示例所需的模块
+將會安裝此示例所需的模組
 
 -------
 
-若没有安装模块或安装模块失败。在命令行运行 `gulp`。则会出现如下报错：
+若沒有安裝模組或安裝模組失敗。在命令行運行 `gulp`。則會出現如下報錯：
 ```
 module.js:338
     throw err;
