@@ -1,4 +1,4 @@
-這是forked from [nimojs/gulp-book](https://github.com/nimojs/gulp-book)
+這是forked from [nimojs/gulp-book](https://github.com/nimojs/gulp-book)。<br>
 由於不習慣看簡體字，因此順手轉成正體。在此感謝原版的貢獻。
 gulp 入門指南
 ===========
